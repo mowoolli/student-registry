@@ -5,8 +5,8 @@ import StudentList from './StudentList';
 const studentList = [
   { id: 1, name: 'John Doe', grade: 1, school: 'React Redux School' },
   { id: 2, name: 'Jane Doe', grade: 2, school: 'React Redux School' },
-  { id: 1, name: 'Terry Adams', grade: 3, school: 'React Redux School' },
-  { id: 1, name: 'Jenny Smith', grade: 4, school: 'React Redux School' }
+  { id: 3, name: 'Terry Adams', grade: 3, school: 'React Redux School' },
+  { id: 4, name: 'Jenny Smith', grade: 4, school: 'React Redux School' }
 ]
 
 if (localStorage.getItem('students') === null) {
@@ -60,7 +60,7 @@ class App extends Component {
   }
 
   editStudentSubmit(id, name, grade, school) {
-    let studentListCopy = this.setState.studentList.map((student) => {
+    let studentListCopy = this.state.studentList.map((student) => {
       if (student.id === id) {
         student.name = name
         student.grade = grade
