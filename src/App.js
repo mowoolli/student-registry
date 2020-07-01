@@ -1,79 +1,43 @@
 import React, { Component } from 'react';
 import './App.css';
 import StudentList from './StudentList';
-
-const studentList = [
-  { id: 1, name: 'John Doe', grade: 1, school: 'React Redux School' },
-  { id: 2, name: 'Jane Doe', grade: 2, school: 'React Redux School' },
-  { id: 3, name: 'Terry Adams', grade: 3, school: 'React Redux School' },
-  { id: 4, name: 'Jenny Smith', grade: 4, school: 'React Redux School' }
-]
-
-if (localStorage.getItem('students') === null) {
-  localStorage.setItem('students', JSON.stringify(studentList))
-}
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { addStudent, deleteStudent, updateStudent } from './actions/studentActions'
 
 class App extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      studentList: []
-    }
 
     this.editStudentSubmit = this.editStudentSubmit.bind(this)
     this.deleteStudent = this.deleteStudent.bind(this)
     this.addNewStudent = this.addNewStudent.bind(this)
   }
 
-  componentWillMount() {
-    let studentList = JSON.parse(localStorage.getItem('students'))
-    this.setState((prevState, props) => ({
-      studentList: studentList
-    }))
-  }
+  // componentWillMount() {
+  //   let studentList = JSON.parse(localStorage.getItem('students'))
+  //   this.setState((prevState, props) => ({
+  //     studentList: studentList
+  //   }))
+  // }
 
   addNewStudent() {
-    this.setState((prevState, props) => ({
-      studentList: [...prevState.studentList, {
-        id: Math.max(...prevState.studentList.map(function (o) {
-          return o.id
-        })) + 1, name: '', grade: 1, school: ''
-      }]
-    }))
+    this.props.addStudent({
+      id: Math.max(...this.props.studentList.map(function (o) {
+        return o.id
+      })) + 1, name: '', grade: 1, school: ''
+    })
   }
 
   deleteStudent(id) {
     let response = window.confirm("Do you want to delete this item?")
     if (response === true) {
-      let filteredStudentList = this.state.studentList.filter(
-        x => x.id !== id
-      )
-
-      this.setState((prevState, props) => ({
-        studentList: filteredStudentList
-      }))
-
-      localStorage.setItem(
-        'students', JSON.stringify(filteredStudentList)
-      )
+      this.props.deleteStudent(id)
     }
   }
 
   editStudentSubmit(id, name, grade, school) {
-    let studentListCopy = this.state.studentList.map((student) => {
-      if (student.id === id) {
-        student.name = name
-        student.grade = grade
-        student.school = school
-      }
-      return student
-    })
-
-    this.setState((prevState, props) => ({
-      studentList: studentListCopy
-    }))
-
-    localStorage.setItem('students', JSON.stringify(studentListCopy))
+    this.props.updateStudent(id, name, grade, school)
   }
 
   render() {
@@ -94,7 +58,7 @@ class App extends Component {
                   </thead>
                   <StudentList
                     deleteStudent={this.deleteStudent}
-                    studentList={this.state.studentList}
+                    studentList={this.props.studentList}
                     editStudentSubmit={this.editStudentSubmit}
                   />
                 </table>
@@ -109,4 +73,18 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    studentList: state
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({
+    addStudent: addStudent,
+    deleteStudent: deleteStudent,
+    updateStudent: updateStudent
+  }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
