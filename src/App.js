@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import StudentList from './StudentList';
 
 const studentList = [
   { id: 1, name: 'John Doe', grade: 1, school: 'React Redux School' },
@@ -78,21 +79,32 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App" >
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-        </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-        </a>
-        </header>
+      <div className="container-fluid" >
+        <div className="row mt-3">
+          <div className="col-lg-12">
+            <div className="card">
+              <div className="card-header">
+                Student Registry
+              </div>
+              <div className="card-body">
+                <table className="table table-hover">
+                  <thead className="thead-dark">
+                    <tr>
+                      <th>Name</th><th>Grade</th><th>School</th><th>Edit/Save</th><th>Delete</th>
+                    </tr>
+                  </thead>
+                  <StudentList
+                    deleteStudent={this.deleteStudent}
+                    studentList={this.state.studentList}
+                    editStudentSubmit={this.editStudentSubmit}
+                  />
+                </table>
+                <button className="btn btn-dark pull-left"
+                  onClick={this.addNewStudent}>Add New</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

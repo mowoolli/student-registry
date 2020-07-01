@@ -15,6 +15,12 @@ export default class StudentItem extends Component {
   }
 
   editStudent() {
+    this.setState((prevState, props) => ({
+      isEdit: !prevState.isEdit
+    }))
+  }
+
+  editStudentSubmit() {
     const { id } = this.props.student
     this.setState((prevState, props) => ({
       isEdit: !prevState.isEdit

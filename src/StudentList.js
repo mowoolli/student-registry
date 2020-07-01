@@ -3,7 +3,7 @@ import StudentItem from './StudentItem'
 
 export default class StudentList extends Component {
   render() {
-    let students = this.props.StudentList
+    let students = this.props.studentList
     const trItem = students.map((item, index) => (
       <StudentItem
         key={index}
